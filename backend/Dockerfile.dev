@@ -1,0 +1,17 @@
+FROM dart:stable
+
+WORKDIR /app
+
+# Cache des dépendances
+COPY pubspec.yaml ./
+RUN dart pub get
+
+COPY . .
+
+EXPOSE 8080
+EXPOSE 8181
+EXPOSE 8182
+
+# On lance l'application avec la machine virtuelle Dart (VM) 
+# et on active le VM Service, obligatoire pour que le Hot Reload fonctionne.
+CMD ["dart", "--enable-vm-service=8181/0.0.0.0", "run", "bin/server.dart"]

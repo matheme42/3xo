@@ -1,0 +1,40 @@
+services:
+  # 1. Le Serveur Back-end Dart
+  backend:
+    hostname: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: dart_websocket_backend
+    volumes:
+      - ./backend:/app
+      - /app/.dart_tool/
+    command: sh -c "dart pub get && dart  --no-dds --enable-vm-service=8181/0.0.0.0 --disable-service-auth-codes run  bin/server.dart"
+    restart: always
+    networks:
+      - app-network
+
+  # 2. Le Serveur Reverse-Proxy Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # On monte les fichiers du Front-end Flutter compilés
+      - ./frontend/build/web:/var/www/flutter_wasm_app
+      # On injecte notre configuration Nginx personnalisée
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # Optionnel : décommente si tu utilises Let's Encrypt / Certbot pour le SSL
+      #- /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+# Définition du réseau Docker privé
+networks:
+  app-network:
+    driver: bridge
