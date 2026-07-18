@@ -6,10 +6,13 @@ services:
       context: ./backend
       dockerfile: Dockerfile.dev
     container_name: dart_websocket_backend
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     volumes:
       - ./backend:/app
       - /app/.dart_tool/
-    command: sh -c "dart pub get && dart  --no-dds --enable-vm-service=8181/0.0.0.0 --disable-service-auth-codes run  bin/server.dart"
+    command: sh -c "dart  --no-dds --enable-vm-service=8181/0.0.0.0 --disable-service-auth-codes run  bin/server.dart"
     restart: always
     networks:
       - app-network

@@ -7,13 +7,17 @@ class WebsocketService {
   Future<void> connect() async {
     _channel = WebSocketChannel.connect(Uri.parse('ws://$host/ws'));
 
-    await _channel!.ready;
-
-    // Pour écouter les messages
-    _channel!.stream.listen(onMessageReceived);
-
-    // Pour envoyer un message
-    _channel!.sink.add('Hello Server!');
+    try {
+      // Attendez que la connexion soit établie
+      await _channel!.ready;
+      print('WebSocket connecté à ws://$host/ws');
+      // Pour écouter les messages
+      _channel!.stream.listen(onMessageReceived);
+      // Pour envoyer un message
+      _channel!.sink.add('Hello Server!');
+    } catch (e) {
+      print('Erreur lors de la connexion au WebSocket: $e');
+    }
   }
 
   void sendMessage(String message) {

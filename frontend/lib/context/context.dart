@@ -4,33 +4,33 @@ import 'package:flutter/foundation.dart' hide Factory;
 import 'package:frontend/api/player.dart';
 import 'package:frontend/api/websocket.dart';
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart';
 
 class AppContext extends ChangeNotifier {
+  // Services that create a link between the app and the backend,
+  // allowing to send and receive messages
   late WebsocketService websocket;
-  late AudioPlayerService player;
-  late AudioPlayerService bruitagePlayer;
 
-  // rive file for the apple animation
-  late File appleRiveFile;
-  RiveWidgetController? appleRiveController;
-  ViewModelInstance? appleRiveViewModel;
+  // Services that allow to play audio files, either music,
+  // ambiance or sound design
+  late AudioPlayerService musiquePlayer;
+  late AudioPlayerService ambiancePlayer;
+  late AudioPlayerService soundsDesignPlayer;
 
+  // current route of the app, used to navigate between different tableaux
+  String currentRoute = 'T1';
+
+  void setCurrentRoute(String route) {
+    currentRoute = route;
+    notifyListeners();
+  }
+
+  // initialize objects and connect to the backend
   Future<void> init() async {
-    player = AudioPlayerService();
-    bruitagePlayer = AudioPlayerService();
+    musiquePlayer = AudioPlayerService();
+    ambiancePlayer = AudioPlayerService();
+    soundsDesignPlayer = AudioPlayerService();
     websocket = WebsocketService();
 
-    appleRiveFile = (await File.asset(
-      'assets/apple.riv',
-      riveFactory: Factory.rive,
-    ))!;
-
-    appleRiveController = RiveWidgetController(appleRiveFile);
-    // appleRiveViewModel = appleRiveController?.dataBind(DataBind.auto());
-
-    // En production, utilisez 'wss://' si vous êtes en HTTPS
     await websocket.connect();
-    websocket.sendMessage('Hello Server!');
   }
 }
