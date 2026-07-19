@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/tableau/tableau.dart';
 import 'package:frontend/tableau/t1.dart';
-import 'package:rive/rive.dart';
 
 class Tableau0 extends StatefulWidget {
   const Tableau0({super.key});

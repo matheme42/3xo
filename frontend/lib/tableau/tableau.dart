@@ -19,7 +19,14 @@ mixin Tableau
   Future<void> init();
 
   // Méthode pour obtenir le nom de la classe du tableau (T0, T1, T2, etc.)
-  String className();
+  // get runtimeType of the current class, and remove the "State" suffix to get the tableau name
+  // and remove the "ableau" prefix to get the tableau name
+  String className() {
+    return runtimeType
+        .toString()
+        .replaceAll('State', '')
+        .replaceAll('ableau', '');
+  }
 
   @override
   void initState() {

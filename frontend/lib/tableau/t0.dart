@@ -1,23 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/context/constant.dart';
 import 'package:frontend/tableau/tableau.dart';
 import 'package:rive/rive.dart';
 
 mixin T0 on State<StatefulWidget>, Tableau {
-  // allow an automatic match between the tableau and the class name,
-  // and the associated assets, for example: T1 -> assets/apple.riv, assets/filante_ambiance.mp3, etc.
-  @override
-  String className() {
-    return 'T0';
-  }
-
-  //////////////////////////////////////////////////////////////////////////////
-  ///                                Constantes                              ///
-  //////////////////////////////////////////////////////////////////////////////
-
-  static const String appleRiveAssetPath = 'door_open.riv';
-  static const String soundDesignDoor = 'filante_ambiance.mp3';
-  static const String soundDesignGlitch = 'SD_Pomme.wav';
-
   //////////////////////////////////////////////////////////////////////////////
   ///                              Local variables                           ///
   //////////////////////////////////////////////////////////////////////////////
@@ -31,7 +17,7 @@ mixin T0 on State<StatefulWidget>, Tableau {
   @override
   Future<void> init() async {
     appleRiveController = await getRiveControllerFromRiveName(
-      appleRiveAssetPath,
+      Constants.appleRiveAssetPath,
     );
   }
 
@@ -43,13 +29,13 @@ mixin T0 on State<StatefulWidget>, Tableau {
     // Exemple d'action lors du tap : envoyer un message via WebSocket
     sendMessageToServer('User tapped on the screen!');
     playSoundsDesign(
-      soundDesignDoor,
+      Constants.soundDesignDoor,
       loop: false,
       fadeIn: false,
       restartIfAlreadyPlaying: true,
     );
     playSoundsDesign(
-      soundDesignGlitch,
+      Constants.ambianceAudioAssetPath,
       loop: false,
       fadeIn: false,
       restartIfAlreadyPlaying: true,

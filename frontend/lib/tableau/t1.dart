@@ -1,23 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/context/constant.dart';
 import 'package:frontend/tableau/tableau.dart';
 import 'package:rive/rive.dart';
 
 mixin T1 on State<StatefulWidget>, Tableau {
-  // allow an automatic match between the tableau and the class name,
-  // and the associated assets, for example: T1 -> assets/apple.riv, assets/filante_ambiance.mp3, etc.
-  @override
-  String className() {
-    return 'T1';
-  }
-
-  //////////////////////////////////////////////////////////////////////////////
-  ///                                Constantes                              ///
-  //////////////////////////////////////////////////////////////////////////////
-
-  static const String appleRiveAssetPath = 'apple.riv';
-  static const String ambianceAudioAssetPath = 'filante_ambiance.mp3';
-  static const String bruitage1AudioAssetPath = 'SD_Pomme.wav';
-
   //////////////////////////////////////////////////////////////////////////////
   ///                              Local variables                           ///
   //////////////////////////////////////////////////////////////////////////////
@@ -31,7 +17,7 @@ mixin T1 on State<StatefulWidget>, Tableau {
   @override
   Future<void> init() async {
     appleRiveController = await getRiveControllerFromRiveName(
-      appleRiveAssetPath,
+      Constants.appleRiveAssetPath,
     );
   }
 
@@ -44,7 +30,7 @@ mixin T1 on State<StatefulWidget>, Tableau {
     sendMessageToServer('User tapped on the screen!');
 
     playAmbiance(
-      ambianceAudioAssetPath,
+      Constants.ambianceAudioAssetPath,
       loop: true,
       fadeIn: true,
       restartIfAlreadyPlaying: false,
@@ -55,7 +41,7 @@ mixin T1 on State<StatefulWidget>, Tableau {
     // Exemple d'action lors du tap sur la pomme : envoyer un message via WebSocket
     sendMessageToServer('User tapped on the apple!');
     playSoundsDesign(
-      bruitage1AudioAssetPath,
+      Constants.bruitage1AudioAssetPath,
       loop: false,
       fadeIn: false,
       restartIfAlreadyPlaying: true,
