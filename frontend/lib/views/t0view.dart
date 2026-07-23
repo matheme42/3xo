@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/tableau/tableau.dart';
-import 'package:frontend/tableau/t1.dart';
+import 'package:frontend/tableau/t0.dart';
+import 'package:rive/rive.dart';
 
 class Tableau0 extends StatefulWidget {
   const Tableau0({super.key});
@@ -12,26 +13,19 @@ class Tableau0 extends StatefulWidget {
 }
 
 class Tableau0State extends State<StatefulWidget>
-    with TickerProviderStateMixin, Tableau, T1 {
+    with TickerProviderStateMixin, Tableau, T0 {
   @override
   Widget build(BuildContext context) {
-    super.build(context); // Call the build method from the Tableau mixin
+    if (!tableauInitialized) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return GestureDetector(
       onTap: handleTap,
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: getImageFromAsset('gemini_background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Stack(children: [
-            
-            ],
-          ),
-        ),
+      child: RiveWidget(
+        controller: appleRiveController!,
+        fit: Fit.cover,
+        layoutScaleFactor: 1 / 3,
+        drawOrder: 0,
       ),
     );
   }

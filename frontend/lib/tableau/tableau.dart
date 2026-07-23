@@ -18,10 +18,31 @@ mixin Tableau
   // lancer ambiance sonore, musique, etc.
   Future<void> init();
 
+  @mustCallSuper
+  Future<void> onInitDone() async {
+    // Méthode appelée après l'initialisation du tableau
+    // exemple: lancer des animations, démarrer des timers, etc.
+
+    if (mounted) {
+      setState(() {
+        tableauInitialized = true;
+      });
+    }
+    _appContext.websocket.registerMessageHandler(
+      className,
+      onMessageFromServer,
+    );
+    _appContext.websocket.sendMessage(className, 'Entered tableau $className');
+  }
+
+  // Méthode pour gérer les messages reçus du serveur
+  // must be implemented by the class that uses this mixin
+  void onMessageFromServer(String message);
+
   // Méthode pour obtenir le nom de la classe du tableau (T0, T1, T2, etc.)
   // get runtimeType of the current class, and remove the "State" suffix to get the tableau name
   // and remove the "ableau" prefix to get the tableau name
-  String className() {
+  String get className {
     return runtimeType
         .toString()
         .replaceAll('State', '')
@@ -34,36 +55,29 @@ mixin Tableau
     _appContext = Provider.of<AppContext>(context, listen: false);
     init().then((_) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          tableauInitialized = true;
-        });
+        onInitDone();
       });
     });
   }
 
   @override
-  @mustCallSuper
-  Widget build(BuildContext context) {
-    if (!tableauInitialized) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    return const SizedBox.shrink(); // Placeholder, should be overridden by subclasses
-  }
-
-  @override
   void dispose() {
+    _appContext.websocket.unregisterMessageHandler(
+      className,
+      onMessageFromServer,
+    );
     super.dispose();
   }
 
   void sendMessageToServer(String message) {
-    _appContext.websocket.sendMessage(message);
+    _appContext.websocket.sendMessage(className, message);
   }
 
   Future<RiveWidgetController?> getRiveControllerFromRiveName(
     String riveName,
   ) async {
     final riveFile = await File.asset(
-      '${className()}/VIS/Rive/$riveName',
+      '/VIS/Rive/$riveName',
       riveFactory: Factory.rive,
     );
     if (riveFile == null) {
@@ -74,8 +88,13 @@ mixin Tableau
   }
 
   AssetImage getImageFromAsset(String assetName) {
-    return AssetImage('${className()}/VIS/Images/$assetName');
+    return AssetImage('VIS/Images/$assetName');
   }
+
+  /// *** Methodes disponibles dans tous les tableaux pour jouer des sons, musiques, ambiances, etc. *** ///
+  ///
+  ///
+  ///
 
   void gotoTableau(String tableauName) {
     _appContext.setCurrentRoute(tableauName);
@@ -89,7 +108,7 @@ mixin Tableau
   }) {
     _appContext.musiquePlayer.play(
       vsync: this,
-      url: "assets/${className()}/Mus/$name",
+      url: "assets/Mus/$name",
       loop: loop,
       fadeIn: fadeIn,
       restartIfAlreadyPlaying: restartIfAlreadyPlaying,
@@ -104,7 +123,7 @@ mixin Tableau
   }) {
     _appContext.ambiancePlayer.play(
       vsync: this,
-      url: "assets/${className()}/Amb/$name",
+      url: "assets/Amb/$name",
       loop: loop,
       fadeIn: fadeIn,
       restartIfAlreadyPlaying: restartIfAlreadyPlaying,
@@ -119,7 +138,7 @@ mixin Tableau
   }) {
     _appContext.soundsDesignPlayer.play(
       vsync: this,
-      url: "assets/${className()}/SD/$name",
+      url: "assets/SD/$name",
       loop: loop,
       fadeIn: fadeIn,
       restartIfAlreadyPlaying: restartIfAlreadyPlaying,

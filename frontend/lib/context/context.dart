@@ -17,7 +17,7 @@ class AppContext extends ChangeNotifier {
   late AudioPlayerService soundsDesignPlayer;
 
   // current route of the app, used to navigate between different tableaux
-  String currentRoute = 'T1';
+  String currentRoute = 'T2';
 
   void setCurrentRoute(String route) {
     currentRoute = route;

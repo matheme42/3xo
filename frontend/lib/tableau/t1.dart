@@ -21,6 +21,17 @@ mixin T1 on State<StatefulWidget>, Tableau {
     );
   }
 
+  @override
+  Future<void> onInitDone() async {
+    super.onInitDone();
+    playAmbiance(
+      Constants.ambianceAudioAssetPath,
+      loop: true,
+      fadeIn: true,
+      restartIfAlreadyPlaying: false,
+    );
+  }
+
   //////////////////////////////////////////////////////////////////////////////
   ///                               Action handlers                          ///
   //////////////////////////////////////////////////////////////////////////////
@@ -28,13 +39,6 @@ mixin T1 on State<StatefulWidget>, Tableau {
   void handleTap() {
     // Exemple d'action lors du tap : envoyer un message via WebSocket
     sendMessageToServer('User tapped on the screen!');
-
-    playAmbiance(
-      Constants.ambianceAudioAssetPath,
-      loop: true,
-      fadeIn: true,
-      restartIfAlreadyPlaying: false,
-    );
   }
 
   void handleTapApple() {
@@ -46,8 +50,15 @@ mixin T1 on State<StatefulWidget>, Tableau {
       fadeIn: false,
       restartIfAlreadyPlaying: true,
     );
-    Future.delayed(const Duration(milliseconds: 3000), () {
-      gotoTableau('T0'); // Navigate to Tableau 2 after 500 milliseconds
-    });
+  }
+
+  @override
+  void onMessageFromServer(String message) {
+    print('Message reçu dans Tableau1: $message');
+
+    // si tu recois User tapped on the apple!. go to T2
+    if (message == 'User tapped on the apple!') {
+      gotoTableau('T2');
+    }
   }
 }

@@ -3,15 +3,12 @@ import 'package:frontend/context/context.dart';
 import 'package:frontend/views/t0view.dart';
 import 'package:provider/provider.dart';
 import 'views/t1view.dart';
+import 'views/t2view.dart';
 
 class AppRouter extends StatelessWidget {
   static const String initialRoute = '/';
 
   const AppRouter({super.key});
-
-  static Map<String, WidgetBuilder> get routes {
-    return {'/T1': (context) => const Tableau1()};
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +16,8 @@ class AppRouter extends StatelessWidget {
       builder: (context, appContext, child) {
         return Navigator(
           pages: [
+            if (appContext.currentRoute == 'T2')
+              MaterialPage(child: const Tableau2()),
             if (appContext.currentRoute == 'T1')
               MaterialPage(child: const Tableau1()),
             if (appContext.currentRoute == 'T0')

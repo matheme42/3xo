@@ -16,7 +16,6 @@ class Tableau1State extends State<StatefulWidget>
     with TickerProviderStateMixin, Tableau, T1 {
   @override
   Widget build(BuildContext context) {
-    super.build(context); // Call the build method from the Tableau mixin
     return GestureDetector(
       onTap: handleTap,
       child: Container(

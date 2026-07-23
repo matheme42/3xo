@@ -5,7 +5,7 @@ class Constants {
   // tableaux
 
   // tableau T0
-  static const String doorOpenRiveAssetPath = 'door_open.riv';
+  static const String doorOpenRiveAssetPath = 'door.riv';
   static const String soundDesignDoor = 'filante_ambiance.mp3';
   static const String soundDesignGlitch = 'SD_Pomme.wav';
 

@@ -17,28 +17,24 @@ mixin T0 on State<StatefulWidget>, Tableau {
   @override
   Future<void> init() async {
     appleRiveController = await getRiveControllerFromRiveName(
-      Constants.appleRiveAssetPath,
+      Constants.doorOpenRiveAssetPath,
     );
+    print(appleRiveController);
+  }
+
+  void handleTap() {
+    // Exemple d'action lors du tap : envoyer un message via WebSocket
+    sendMessageToServer('User tapped on the screen!');
+
+    gotoTableau('T1');
   }
 
   //////////////////////////////////////////////////////////////////////////////
   ///                               Action handlers                          ///
   //////////////////////////////////////////////////////////////////////////////
 
-  void handleTap() {
-    // Exemple d'action lors du tap : envoyer un message via WebSocket
-    sendMessageToServer('User tapped on the screen!');
-    playSoundsDesign(
-      Constants.soundDesignDoor,
-      loop: false,
-      fadeIn: false,
-      restartIfAlreadyPlaying: true,
-    );
-    playSoundsDesign(
-      Constants.ambianceAudioAssetPath,
-      loop: false,
-      fadeIn: false,
-      restartIfAlreadyPlaying: true,
-    );
+  @override
+  void onMessageFromServer(String message) {
+    print('Message reçu dans Tableau0: $message');
   }
 }
