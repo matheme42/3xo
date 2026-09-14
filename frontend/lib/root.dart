@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/router.dart';
-import 'package:frontend/views/t1view.dart';
 import 'package:web/web.dart' as html;
 import 'context/context.dart';
 import 'package:provider/provider.dart';
@@ -123,6 +122,12 @@ class _RootState extends State<Root> {
       );
     }
 
-    return widget.child ?? const SizedBox.shrink();
+    return Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: (_) {
+        widget.appContext.unlockAudioIfNeeded();
+      },
+      child: widget.child ?? const SizedBox.shrink(),
+    );
   }
 }

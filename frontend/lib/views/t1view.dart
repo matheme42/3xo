@@ -15,6 +15,9 @@ class Tableau1 extends StatefulWidget {
 class Tableau1State extends State<StatefulWidget>
     with TickerProviderStateMixin, Tableau, T1 {
   @override
+  String get tableauName => 'T1';
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: handleTap,

@@ -12,7 +12,7 @@ services:
     volumes:
       - ./backend:/app
       - /app/.dart_tool/
-    command: sh -c "dart  --no-dds --enable-vm-service=8181/0.0.0.0 --disable-service-auth-codes run  bin/server.dart"
+    command: sh -c "dart pub get && dart --no-dds --enable-vm-service=8181/0.0.0.0 --disable-service-auth-codes run bin/server.dart"
     restart: always
     networks:
       - app-network

@@ -9,6 +9,8 @@ mixin Tableau
     on State<StatefulWidget>, TickerProviderStateMixin<StatefulWidget> {
   late AppContext _appContext;
 
+  String get tableauName;
+
   bool tableauInitialized = false;
 
   // Méthode pour initialiser le tableau
@@ -29,25 +31,18 @@ mixin Tableau
       });
     }
     _appContext.websocket.registerMessageHandler(
-      className,
+      tableauName,
       onMessageFromServer,
     );
-    _appContext.websocket.sendMessage(className, 'Entered tableau $className');
+    _appContext.websocket.sendMessage(
+      tableauName,
+      'Entered tableau $tableauName',
+    );
   }
 
   // Méthode pour gérer les messages reçus du serveur
   // must be implemented by the class that uses this mixin
   void onMessageFromServer(String message);
-
-  // Méthode pour obtenir le nom de la classe du tableau (T0, T1, T2, etc.)
-  // get runtimeType of the current class, and remove the "State" suffix to get the tableau name
-  // and remove the "ableau" prefix to get the tableau name
-  String get className {
-    return runtimeType
-        .toString()
-        .replaceAll('State', '')
-        .replaceAll('ableau', '');
-  }
 
   @override
   void initState() {
@@ -63,21 +58,21 @@ mixin Tableau
   @override
   void dispose() {
     _appContext.websocket.unregisterMessageHandler(
-      className,
+      tableauName,
       onMessageFromServer,
     );
     super.dispose();
   }
 
   void sendMessageToServer(String message) {
-    _appContext.websocket.sendMessage(className, message);
+    _appContext.websocket.sendMessage(tableauName, message);
   }
 
   Future<RiveWidgetController?> getRiveControllerFromRiveName(
     String riveName,
   ) async {
     final riveFile = await File.asset(
-      '/VIS/Rive/$riveName',
+      'assets/VIS/Rive/$riveName',
       riveFactory: Factory.rive,
     );
     if (riveFile == null) {
@@ -88,7 +83,7 @@ mixin Tableau
   }
 
   AssetImage getImageFromAsset(String assetName) {
-    return AssetImage('VIS/Images/$assetName');
+    return AssetImage('assets/VIS/Images/$assetName');
   }
 
   /// *** Methodes disponibles dans tous les tableaux pour jouer des sons, musiques, ambiances, etc. *** ///
@@ -112,6 +107,7 @@ mixin Tableau
       loop: loop,
       fadeIn: fadeIn,
       restartIfAlreadyPlaying: restartIfAlreadyPlaying,
+      waitForUserInteractionOnWeb: true,
     );
   }
 
@@ -127,6 +123,7 @@ mixin Tableau
       loop: loop,
       fadeIn: fadeIn,
       restartIfAlreadyPlaying: restartIfAlreadyPlaying,
+      waitForUserInteractionOnWeb: false,
     );
   }
 

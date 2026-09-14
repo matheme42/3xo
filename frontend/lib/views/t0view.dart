@@ -15,6 +15,9 @@ class Tableau0 extends StatefulWidget {
 class Tableau0State extends State<StatefulWidget>
     with TickerProviderStateMixin, Tableau, T0 {
   @override
+  String get tableauName => 'T0';
+
+  @override
   Widget build(BuildContext context) {
     if (!tableauInitialized) {
       return const Center(child: CircularProgressIndicator());

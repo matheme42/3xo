@@ -15,6 +15,10 @@ class Tableau2 extends StatefulWidget {
 class Tableau2State extends State<StatefulWidget>
     with TickerProviderStateMixin, Tableau, T2 {
   final ScrollController _scrollController = ScrollController();
+
+  @override
+  String get tableauName => 'T2';
+
   @override
   void dispose() {
     _scrollController.dispose();

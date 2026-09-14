@@ -1,6 +1,7 @@
-FROM dart:stable
+FROM dart:3.13.3
 
 WORKDIR /app
+ENV PUB_CACHE=/var/cache/dart/pub
 
 # Cache des dépendances
 COPY pubspec.yaml ./

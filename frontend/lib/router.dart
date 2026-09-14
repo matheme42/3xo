@@ -6,8 +6,6 @@ import 'views/t1view.dart';
 import 'views/t2view.dart';
 
 class AppRouter extends StatelessWidget {
-  static const String initialRoute = '/';
-
   const AppRouter({super.key});
 
   @override

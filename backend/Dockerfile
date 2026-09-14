@@ -1,7 +1,8 @@
 # Étape 1 : Build de l'application Dart avec le SDK officiel
-FROM dart:stable AS build
+FROM dart:3.13.3 AS build
 
 WORKDIR /app
+ENV PUB_CACHE=/var/cache/dart/pub
 
 # Copie d'abord les specs pour optimiser le cache des dépendances
 COPY pubspec.yaml ./
