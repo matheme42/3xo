@@ -1,0 +1,1 @@
+docker run -it  -p 3000:3000 -v .:/app flutter-3.44-devenv bash -c "flutter run -d web-server --web-port=3000"
