@@ -1,6 +1,14 @@
 class Constants {
-  // system
-  static const String websocketUrl = 'ws://localhost:8080';
+  // system : même hôte/port que la page, via le proxy nginx (/ws)
+  static String get websocketUrl {
+    final base = Uri.base;
+    return Uri(
+      scheme: base.scheme == 'https' ? 'wss' : 'ws',
+      host: base.host,
+      port: base.hasPort ? base.port : null,
+      path: '/ws',
+    ).toString();
+  }
 
   // tableaux
 

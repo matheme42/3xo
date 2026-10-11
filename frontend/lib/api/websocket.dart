@@ -1,18 +1,19 @@
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../context/constant.dart';
+
 class WebsocketService {
-  static const host = 'localhost';
   WebSocketChannel? _channel;
   final Map<String, List<Function(String)>> _roomMessageHandlers = {};
 
   Future<void> connect() async {
-    _channel = WebSocketChannel.connect(Uri.parse('ws://$host/ws'));
+    _channel = WebSocketChannel.connect(Uri.parse(Constants.websocketUrl));
 
     try {
       // Attendez que la connexion soit établie
       await _channel!.ready;
-      print('WebSocket connecté à ws://$host/ws');
+      print('WebSocket connecté à ${Constants.websocketUrl}');
       // Pour écouter les messages
       _channel!.stream.listen(onMessageReceived);
       // Pour envoyer un message
