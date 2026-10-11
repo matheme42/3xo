@@ -6,6 +6,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 IMAGE_NAME="flutter-3.44-devenv"
+# Le SDK Flutter Linux est x86_64 : on force amd64 (émulé via Rosetta/QEMU sur Mac ARM)
+PLATFORM="linux/amd64"
 DOCKERFILE_DIR="${SCRIPT_DIR}/../dev-tools"
 
 if [[ -z "$(docker images -q "${IMAGE_NAME}" 2>/dev/null)" ]]; then
@@ -16,9 +18,9 @@ if [[ -z "$(docker images -q "${IMAGE_NAME}" 2>/dev/null)" ]]; then
         exit 1
     fi
 
-    docker build -t "${IMAGE_NAME}" "${DOCKERFILE_DIR}"
+    docker build --platform "${PLATFORM}" -t "${IMAGE_NAME}" "${DOCKERFILE_DIR}"
 else
     echo "Image '${IMAGE_NAME}' déjà présente, on continue."
 fi
 
-docker run -it -v "${SCRIPT_DIR}":/app "${IMAGE_NAME}" bash -c "flutter build web --wasm"
+docker run -it --platform "${PLATFORM}" -v "${SCRIPT_DIR}":/app "${IMAGE_NAME}" bash -c "flutter build web --wasm"
